@@ -17,13 +17,11 @@ package com.ricm.miamtime.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -46,9 +43,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
@@ -120,9 +115,9 @@ public class ForecastFragment extends Fragment {
     private void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = prefs.getString(getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
-        weatherTask.execute(location);
+        String range = prefs.getString(getString(R.string.pref_range_key),
+                getString(R.string.pref_range_default));
+        weatherTask.execute(range);
     }
 
     @Override
@@ -143,7 +138,7 @@ public class ForecastFragment extends Fragment {
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private String[] getWeatherDataFromJson(String JsonStr, int nb_places)
+        private String[] getWeatherDataFromJson(String JsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -163,7 +158,8 @@ public class ForecastFragment extends Fragment {
             JSONObject places_Json = new JSONObject(JsonStr);
             JSONArray PlacesArray = places_Json.getJSONArray(OWM_RES);
 
-            String[] resultStrs = new String[nb_places];
+            Log.d(LOG_TAG,"Toto : " + PlacesArray.length());
+            String[] resultStrs = new String[PlacesArray.length()];
             for(int i = 0; i < PlacesArray.length(); i++) {
 
                 // on recup nom, addr, et coords gps...
@@ -203,10 +199,10 @@ public class ForecastFragment extends Fragment {
 
             String type = "food";
             String key = "AIzaSyDafj_vmRc5A7bQqu31OvXUa_RKY9vRNvI";
-            int radius = 500;
-            String latQuery = "45.1845526";
-            String lngQuery = "5.7520256";
-            int nb_places = 14;
+            int radius = Integer.parseInt(getString(R.string.pref_range_default));
+            String latQuery = "45.1727575";
+            String lngQuery = "5.7568176";
+
 
             try {
                 // Construct the URL for the OpenWeatherMap query
@@ -216,12 +212,16 @@ public class ForecastFragment extends Fragment {
                 final String LOCATION_PARAM_MIAM = "location";
                 final String TYPES_PARAM_MIAM  = "types";
                 final String UNITS_PARAM_MIAM  = "radius";
+                final String OPENNOW_PARAM_MIAM  = "opennow";
                 final String KEY_PARAM_MIAM  = "key";
+
+                Log.d(LOG_TAG,"Toto : " + params[0]);
 
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                         .appendQueryParameter(LOCATION_PARAM_MIAM ,latQuery+","+lngQuery)
-                        .appendQueryParameter(UNITS_PARAM_MIAM , Integer.toString(radius))
+                        .appendQueryParameter(UNITS_PARAM_MIAM , params[0])
                         .appendQueryParameter(TYPES_PARAM_MIAM , type)
+                        .appendQueryParameter(OPENNOW_PARAM_MIAM , "")
                         .appendQueryParameter(KEY_PARAM_MIAM , key)
                         .build();
 
@@ -273,7 +273,7 @@ public class ForecastFragment extends Fragment {
             }
 
             try {
-                return getWeatherDataFromJson(JsonStr, nb_places);
+                return getWeatherDataFromJson(JsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
