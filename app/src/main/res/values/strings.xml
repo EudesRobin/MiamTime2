@@ -21,14 +21,14 @@
     <string name="title_activity_detail">Details</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Label for the location preference [CHAR LIMIT=30] -->
-    <string name="pref_location_label">Location</string>
+    <!-- Label for the range preference [CHAR LIMIT=30] -->
+    <string name="pref_range_label">Rayon de recherche</string>
 
-    <!-- Key name for storing location in SharedPreferences [CHAR LIMIT=NONE] -->
-    <string name="pref_location_key" translatable="false">location</string>
+    <!-- Key name for storing range in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_range_key" translatable="false">range</string>
 
-    <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
-    <string name="pref_location_default" translatable="false">94043</string>
+    <!-- Default range location preference [CHAR LIMIT=NONE] -->
+    <string name="pref_range_default" translatable="false">10</string>
 
     <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
     <string name="pref_units_label">Temperature Units</string>
