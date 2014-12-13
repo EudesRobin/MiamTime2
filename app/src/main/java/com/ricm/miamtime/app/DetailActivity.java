@@ -16,6 +16,7 @@
 package com.ricm.miamtime.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -33,13 +34,15 @@ import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
 
+    DetailFragment detailFragment = new DetailFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailFragment())
+                    .add(R.id.container, detailFragment)
                     .commit();
         }
     }
@@ -54,14 +57,7 @@ public class DetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
+        detailFragment.itineraire();
         return super.onOptionsItemSelected(item);
     }
 
@@ -91,7 +87,6 @@ public class DetailActivity extends ActionBarActivity {
                 ((TextView) rootView.findViewById(R.id.detail_text))
                         .setText(mForecastStr);
             }
-
             return rootView;
         }
 
@@ -124,5 +119,44 @@ public class DetailActivity extends ActionBarActivity {
                     mForecastStr + FORECAST_SHARE_HASHTAG);
             return shareIntent;
         }
+
+        private String buildGoogleMapURL() {
+
+            String[] mForecastSplit = new String[4];
+
+            int i=0;
+            for(String retval: mForecastStr.split("\n")){
+                mForecastSplit[i]=retval;
+                i++;
+            }
+
+            String latitude =  mForecastSplit[2];
+            String longitude = mForecastSplit[3];
+
+            StringBuilder url = new StringBuilder();
+            url.append("http://maps.google.com/maps?f=d&hl=");
+            url.append("locale");
+            url.append("&saddr=");//from
+            url.append(Double.toString(Utility.latitude));
+            url.append(",");
+            url.append(Double.toString(Utility.longitude));
+            url.append("&daddr=");//to
+            url.append(latitude);
+            url.append(",");
+            url.append(longitude);
+            url.append("&ie=UTF8&0&om=0&output=kml");
+            System.out.println(url);
+            return url.toString();
+        }
+
+        public void itineraire(){
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(buildGoogleMapURL()));
+            startActivity(intent);
+        }
+
     }
+
+
+
 }

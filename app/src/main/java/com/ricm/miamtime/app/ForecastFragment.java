@@ -165,17 +165,21 @@ public class ForecastFragment extends Fragment {
                 // on recup nom, addr, et coords gps...
                 String nom;
                 String address;
-
+                Double latres;
+                Double lngres;
 
 
                 // Get the JSON object representing the place
                 JSONObject place = PlacesArray.getJSONObject(i);
 
-
                 nom = place.getString(OWM_NAME);
                 address = place.getString(OWM_ADRESS);
 
-                resultStrs[i] = nom + "\n" + address;
+                latres = place.getJSONObject(OWM_GEOM).getJSONObject(OWM_LOCATION_MIAM).getDouble(OWM_LATITUDE_MIAM);
+                lngres = place.getJSONObject(OWM_GEOM).getJSONObject(OWM_LOCATION_MIAM).getDouble(OWM_LONGITUDE_MIAM);
+
+
+                resultStrs[i] = nom + "\n" + address + "\n" + Double.toString(latres) + "\n" + Double.toString(lngres);
             }
 
             return resultStrs;
