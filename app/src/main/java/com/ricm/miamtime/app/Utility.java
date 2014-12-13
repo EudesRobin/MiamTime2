@@ -11,6 +11,7 @@ public class Utility {
 
     public static double latitude;
     public static double longitude;
+    public static String nextPageToken = null;
 
     public static String getPreferredRange(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

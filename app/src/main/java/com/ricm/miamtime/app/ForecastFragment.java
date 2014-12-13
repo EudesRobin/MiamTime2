@@ -50,6 +50,9 @@ import java.util.ArrayList;
  */
 public class ForecastFragment extends Fragment {
 
+
+    private final String LOG_TAG = ForecastFragment.class.getSimpleName();
+
     private ArrayAdapter<String> mForecastAdapter;
 
     public ForecastFragment() {
@@ -73,9 +76,17 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
+        if (id == R.id.action_retourPremPage) {
+            Utility.nextPageToken=null;
             updateWeather();
             return true;
+        }
+        if (id == R.id.more_res) {
+            if(Utility.nextPageToken != null){
+                Log.d(LOG_TAG,"Next Page Token : " + Utility.nextPageToken);
+                updateWeather();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -112,11 +123,12 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    private void updateWeather() {
+    public void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String range = prefs.getString(getString(R.string.pref_range_key),
                 getString(R.string.pref_range_default));
+        //Utility.nextPageToken=null;
         weatherTask.execute(range);
     }
 
@@ -142,6 +154,7 @@ public class ForecastFragment extends Fragment {
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
+            final String OWM_NPT = "next_page_token";
             final String OWM_RES = "results";
             final String OWM_NAME = "name";
             final String OWM_BOOL_OPENING = "open_now";
@@ -155,9 +168,16 @@ public class ForecastFragment extends Fragment {
             final String OWM_LONGITUDE_MIAM = "lng";
             final String OWM_ADRESS = "vicinity";
 
+
             JSONObject places_Json = new JSONObject(JsonStr);
             JSONArray PlacesArray = places_Json.getJSONArray(OWM_RES);
 
+            Utility.nextPageToken = null;
+            try{
+                Utility.nextPageToken = places_Json.getString(OWM_NPT);
+            }catch(org.json.JSONException j){
+                Utility.nextPageToken = null;
+            }
             Log.d(LOG_TAG,"Toto : " + PlacesArray.length());
             String[] resultStrs = new String[PlacesArray.length()];
             for(int i = 0; i < PlacesArray.length(); i++) {
@@ -221,16 +241,24 @@ public class ForecastFragment extends Fragment {
                 final String UNITS_PARAM_MIAM  = "radius";
                 final String OPENNOW_PARAM_MIAM  = "opennow";
                 final String KEY_PARAM_MIAM  = "key";
+                final String PTOKEN_PARAM_MIAM  = "pagetoken";
 
                 Log.d(LOG_TAG,"Toto : " + params[0]);
-
-                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                        .appendQueryParameter(LOCATION_PARAM_MIAM ,latQuery+","+lngQuery)
-                        .appendQueryParameter(UNITS_PARAM_MIAM , params[0])
-                        .appendQueryParameter(TYPES_PARAM_MIAM , type)
-                        .appendQueryParameter(OPENNOW_PARAM_MIAM , "")
-                        .appendQueryParameter(KEY_PARAM_MIAM , key)
-                        .build();
+                Uri builtUri;
+                if (Utility.nextPageToken == null) {
+                    builtUri = Uri.parse(BASE_URL).buildUpon()
+                            .appendQueryParameter(LOCATION_PARAM_MIAM, latQuery + "," + lngQuery)
+                            .appendQueryParameter(UNITS_PARAM_MIAM, params[0])
+                            .appendQueryParameter(TYPES_PARAM_MIAM, type)
+                            .appendQueryParameter(OPENNOW_PARAM_MIAM, "")
+                            .appendQueryParameter(KEY_PARAM_MIAM, key)
+                            .build();
+                }else{
+                    builtUri = Uri.parse(BASE_URL).buildUpon()
+                            .appendQueryParameter(PTOKEN_PARAM_MIAM, Utility.nextPageToken)
+                            .appendQueryParameter(KEY_PARAM_MIAM, key)
+                            .build();
+                }
 
                 URL url = new URL(builtUri.toString());
 
@@ -285,7 +313,6 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
-
             // This will only happen if there was an error getting or parsing the forecast.
             return null;
         }

@@ -15,6 +15,8 @@
  */
 package com.ricm.miamtime.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Criteria;
@@ -31,7 +33,6 @@ public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         // Get the LocationManager object from the System Service LOCATION_SERVICE
-        LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         // Create a criteria object needed to retrieve the provider
         Criteria criteria = new Criteria();
@@ -56,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
         this.setLatitude(mylocation);
         this.setLongitude(mylocation);
+
     }
 
 
@@ -76,9 +78,21 @@ public class MainActivity extends ActionBarActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-        if (id == R.id.action_map) {
-            openPreferredLocationInMap();
-            return true;
+        if (id == R.id.more_res) {
+            if (Utility.nextPageToken == null) {
+                AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+                dlgAlert.setMessage("Il n'y pas plus d'endroits pour se restaurer aux alentours !");
+                dlgAlert.setTitle("Désolé :(");
+                dlgAlert.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dismiss the dialog
+                            }
+                        });
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -108,11 +122,11 @@ public class MainActivity extends ActionBarActivity {
         }*/
     }
 
-    public void setLatitude (Location location){
+    public void setLatitude(Location location) {
         Utility.latitude = location.getLatitude();
     }
 
-    public void setLongitude (Location location){
+    public void setLongitude(Location location) {
         Utility.longitude = location.getLongitude();
     }
 
