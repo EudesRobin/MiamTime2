@@ -17,6 +17,9 @@ package com.ricm.miamtime.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -28,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,21 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new ForecastFragment())
                     .commit();
         }
+
+        // Get the LocationManager object from the System Service LOCATION_SERVICE
+        LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+
+        // Create a criteria object needed to retrieve the provider
+        Criteria criteria = new Criteria();
+
+        // Get the name of the best available provider
+        String provider = locationManager.getBestProvider(criteria, true);
+
+        // We can use the provider immediately to get the last known location
+        Location mylocation = locationManager.getLastKnownLocation(provider);
+
+        this.setLatitude(mylocation);
+        this.setLongitude(mylocation);
     }
 
 
@@ -88,4 +107,13 @@ public class MainActivity extends ActionBarActivity {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }*/
     }
+
+    public void setLatitude (Location location){
+        Utility.latitude = location.getLatitude();
+    }
+
+    public void setLongitude (Location location){
+        Utility.longitude = location.getLongitude();
+    }
+
 }

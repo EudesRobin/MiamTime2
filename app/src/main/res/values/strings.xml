@@ -31,6 +31,24 @@
     <!-- Default range location preference [CHAR LIMIT=NONE] -->
     <string name="pref_range_default" translatable="false">10</string>
 
+    <!-- Label for the range preference [CHAR LIMIT=30] -->
+    <string name="pref_lat_label">Latitude</string>
+
+    <!-- Key name for storing range in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_lat_key" translatable="false">latitude</string>
+
+    <!-- Default range location preference [CHAR LIMIT=NONE] -->
+    <string name="pref_lat_default" translatable="false">45.1727575</string>
+
+    <!-- Label for the range preference [CHAR LIMIT=30] -->
+    <string name="pref_long_label">Longitude</string>
+
+    <!-- Key name for storing range in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_long_key" translatable="false">longitude</string>
+
+    <!-- Default range location preference [CHAR LIMIT=NONE] -->
+    <string name="pref_long_default" translatable="false">5.7568176</string>
+
     <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
     <string name="pref_units_label">Temperature Units</string>
 

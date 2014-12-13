@@ -188,20 +188,23 @@ public class ForecastFragment extends Fragment {
             if (params.length == 0) {
                 return null;
             }
-
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
             String JsonStr = null;
+
 
             String type = "food";
             String key = "AIzaSyDafj_vmRc5A7bQqu31OvXUa_RKY9vRNvI";
             int radius = Integer.parseInt(getString(R.string.pref_range_default));
-            String latQuery = "45.1727575";
-            String lngQuery = "5.7568176";
+            String latQuery = Double.toString(Utility.latitude);
+            String lngQuery = Double.toString(Utility.longitude);
+
+            Log.d(LOG_TAG,"Latitude : " + latQuery);
+            Log.d(LOG_TAG,"Longitude : " + lngQuery);
+            //String latQuery = "45.1727575";
+           // String lngQuery = "5.7568176";
 
 
             try {
