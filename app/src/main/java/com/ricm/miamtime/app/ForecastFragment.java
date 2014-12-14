@@ -83,7 +83,6 @@ public class ForecastFragment extends Fragment {
         }
         if (id == R.id.more_res) {
             if(Utility.nextPageToken != null){
-                Log.d(LOG_TAG,"Next Page Token : " + Utility.nextPageToken);
                 updateWeather();
                 return true;
             }
