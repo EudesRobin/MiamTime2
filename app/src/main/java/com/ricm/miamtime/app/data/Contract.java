@@ -1,8 +1,8 @@
 package com.ricm.miamtime.app.data;
 
-import android.provider.BaseColumns;
 import android.content.ContentUris;
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 /**
  * Created by eudes on 12/12/14.
@@ -45,6 +45,10 @@ public class Contract {
         public static final String COLUMN_RATING_PLACE = "rating";
         // address
         public static final String COLUMN_ADDR = "address";
+        // latitude
+        public static final String COLUMN_LATITUDE = "latitude";
+        // longitude
+        public static final String COLUMN_LONGITUDE = "longitude";
 
 
         public static Uri buildPlacesUri(long id) {
