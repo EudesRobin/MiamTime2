@@ -12,24 +12,24 @@
          By convention, "action" denotes that this String will be used as the label for an Action,
          typically from the action bar.  The ActionBar is limited real estate, so shorter is better.
     -->
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Options</string>
     <string name="action_itineraire">Itineraire</string>
     <string name="action_moreres">Plus de résultats</string>
-    <string name="action_share">Share</string>
+    <string name="action_share">Partager</string>
 
     <!-- Menu label to fetch updated weather info from the server -->
     <string name="action_retourPremPage" translatable="false">Retour à la première page</string>
     <string name="title_activity_detail">Details</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Options</string>
 
     <!-- Label for the range preference [CHAR LIMIT=30] -->
-    <string name="pref_range_label">Rayon de recherche</string>
+    <string name="pref_range_label">Rayon de recherche (en mètres)</string>
 
     <!-- Key name for storing range in SharedPreferences [CHAR LIMIT=NONE] -->
     <string name="pref_range_key" translatable="false">range</string>
 
     <!-- Default range location preference [CHAR LIMIT=NONE] -->
-    <string name="pref_range_default" translatable="false">10</string>
+    <string name="pref_range_default" translatable="false">250</string>
 
     <!-- Label for the range preference [CHAR LIMIT=30] -->
     <string name="pref_lat_label">Latitude</string>
@@ -49,22 +49,5 @@
     <!-- Default range location preference [CHAR LIMIT=NONE] -->
     <string name="pref_long_default" translatable="false">5.7568176</string>
 
-    <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
-    <string name="pref_units_label">Temperature Units</string>
-
-    <!-- Label for metric option in temperature unit preference [CHAR LIMIT=25] -->
-    <string name="pref_units_label_metric">Metric</string>
-
-    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
-    <string name="pref_units_label_imperial">Imperial</string>
-
-    <!-- Key name for temperature unit preference in SharedPreferences [CHAR LIMIT=NONE] -->
-    <string name="pref_units_key" translatable="false">units</string>
-
-    <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_units_metric" translatable="false">metric</string>
-
-    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
-    <string name="pref_units_imperial" translatable="false">imperial</string>
 
 </resources>

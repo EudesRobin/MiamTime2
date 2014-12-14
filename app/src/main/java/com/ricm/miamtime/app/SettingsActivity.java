@@ -20,6 +20,9 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -40,7 +43,6 @@ public class SettingsActivity extends PreferenceActivity
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
     }
 
@@ -55,10 +57,12 @@ public class SettingsActivity extends PreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+
     }
 
     @Override
@@ -75,6 +79,14 @@ public class SettingsActivity extends PreferenceActivity
             }
         } else {
             // For other preferences, set the summary to the value's simple string representation.
+            if (preference.getKey().equalsIgnoreCase("range")) {
+                if ((stringValue.isEmpty() || Integer.parseInt(stringValue) < 25)) {
+                    Toast toast = Toast.makeText(this,"Erreur\nRayon min : 25m",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    return false;
+                }
+            }
             preference.setSummary(stringValue);
         }
         return true;

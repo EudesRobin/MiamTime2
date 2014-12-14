@@ -217,23 +217,15 @@ public class ForecastFragment extends Fragment {
             BufferedReader reader = null;
             String JsonStr = null;
 
-
             String type = "food";
             String key = "AIzaSyDafj_vmRc5A7bQqu31OvXUa_RKY9vRNvI";
-            int radius = Integer.parseInt(getString(R.string.pref_range_default));
             String latQuery = Double.toString(Utility.latitude);
             String lngQuery = Double.toString(Utility.longitude);
 
-            Log.d(LOG_TAG,"Latitude : " + latQuery);
-            Log.d(LOG_TAG,"Longitude : " + lngQuery);
-            //String latQuery = "45.1727575";
-           // String lngQuery = "5.7568176";
 
 
             try {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
+                // Construct the URL for the GooglePlace API
                 final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
                 final String LOCATION_PARAM_MIAM = "location";
                 final String TYPES_PARAM_MIAM  = "types";
@@ -242,7 +234,7 @@ public class ForecastFragment extends Fragment {
                 final String KEY_PARAM_MIAM  = "key";
                 final String PTOKEN_PARAM_MIAM  = "pagetoken";
 
-                Log.d(LOG_TAG,"Toto : " + params[0]);
+
                 Uri builtUri;
                 if (Utility.nextPageToken == null) {
                     builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -260,6 +252,8 @@ public class ForecastFragment extends Fragment {
                 }
 
                 URL url = new URL(builtUri.toString());
+
+                Log.d(LOG_TAG, "check URL" + builtUri.toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();

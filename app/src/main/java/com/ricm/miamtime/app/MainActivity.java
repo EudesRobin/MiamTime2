@@ -19,7 +19,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -27,11 +26,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    LocationManager mLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +44,42 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
 
-        // Get the LocationManager object from the System Service LOCATION_SERVICE
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        /* On chope notre localisation */
+        Location myLocation = getLastKnownLocation();
 
-        // Create a criteria object needed to retrieve the provider
-        Criteria criteria = new Criteria();
+        /* On set tout ça... */
+        this.setLatitude(myLocation);
+        this.setLongitude(myLocation);
 
-        // Get the name of the best available provider
-        String provider = locationManager.getBestProvider(criteria, true);
+    }
 
-        // We can use the provider immediately to get the last known location
-        Location mylocation = locationManager.getLastKnownLocation(provider);
+    /* La methode dispo dans la lib retourne null,
+    http://stackoverflow.com/questions/15409754/getlastknownlocation-returns-null-even-with-best-provider
 
-        this.setLatitude(mylocation);
-        this.setLongitude(mylocation);
+    > getLastKnownLocation() only returns a Location object for a provider if that provider has been used recently.
+    >> If it has not been recently, Android assumes that whatever was the last location given by that provider is out of date and wrong, and returns null.
+    >>> In such a case, you will have to wait for your LocationListener's onLocationChanged() method to be called before you have a usable location.
 
+    soluce :
+
+    http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
+     ( avec la redéfinition si dessous )
+    */
+    private Location getLastKnownLocation() {
+        mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List <String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
 
