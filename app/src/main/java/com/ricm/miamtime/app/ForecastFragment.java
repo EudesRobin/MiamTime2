@@ -198,6 +198,17 @@ public class ForecastFragment extends Fragment {
                 lngres = place.getJSONObject(OWM_GEOM).getJSONObject(OWM_LOCATION_MIAM).getDouble(OWM_LONGITUDE_MIAM);
 
                 //----------------------------------------
+                SharedPreferences sharedPrefs =
+                        PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String tspType = sharedPrefs.getString(
+                        getString(R.string.pref_trnspt_key),
+                        getString(R.string.pref_trnspt_pied));
+                String modeTsp;
+                if (tspType.equals(getString(R.string.pref_trnspt_voiture))) {
+                  modeTsp = "driving";
+                } else  {
+                  modeTsp = "walking";
+                }
                 // Pour récupérer le temps de parcours;
                 HttpURLConnection urlConnection = null;
                 BufferedReader reader = null;
@@ -211,7 +222,8 @@ public class ForecastFragment extends Fragment {
                     String uriduree = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
                             latQuery + "," + lngQuery +
                             "&destinations=" +
-                            Double.toString(latres) + "," + Double.toString(lngres) + "&mode=walking";
+                            Double.toString(latres) + "," + Double.toString(lngres) + "&mode=" +
+                            modeTsp;
                     Uri builtUri = Uri.parse(uriduree).buildUpon().build();
 
                     URL url = new URL(builtUri.toString());
@@ -260,69 +272,12 @@ public class ForecastFragment extends Fragment {
                         }
                     }
                 }
-                // EN VOITURE
-                try {
-                    String uriduree2 = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
-                            latQuery + "," + lngQuery +
-                            "&destinations=" +
-                            Double.toString(latres) + "," + Double.toString(lngres) + "&mode=driving";
-                    Uri builtUri2 = Uri.parse(uriduree2).buildUpon().build();
-
-                    URL url2 = new URL(builtUri2.toString());
-
-                    Log.d(LOG_TAG, "check URL" + builtUri2.toString());
-
-                    // Create the request to OpenWeatherMap, and open the connection
-                    urlConnection2 = (HttpURLConnection) url2.openConnection();
-                    urlConnection2.setRequestMethod("GET");
-                    urlConnection2.connect();
-
-                    // Read the input stream into a String
-                    InputStream inputStream2 = urlConnection2.getInputStream();
-                    StringBuffer buffer2 = new StringBuffer();
-                    if (inputStream2 == null) {
-                        // Nothing to do.
-                        return null;
-                    }
-                    reader2 = new BufferedReader(new InputStreamReader(inputStream2));
-
-                    String line2;
-                    while ((line2 = reader2.readLine()) != null) {
-                        buffer2.append(line2 + "\n");
-                    }
-
-                    if (buffer2.length() == 0) {
-                        // Stream was empty.  No point in parsing.
-                        return null;
-                    }
-                    JsonDureeVoiture = buffer2.toString();
-
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Error ", e);
-                    // If the code didn't successfully get the weather data, there's no point in attemping
-                    // to parse it.
-                    return null;
-                } finally {
-                    if (urlConnection2 != null) {
-                        urlConnection2.disconnect();
-                    }
-                    if (reader2 != null) {
-                        try {
-                            reader2.close();
-                        } catch (final IOException e) {
-                            Log.e(LOG_TAG, "Error closing stream", e);
-                        }
-                    }
-                }
 
                 JSONObject duree_Json = new JSONObject(JsonDuree);
                 String dureeTrajet = duree_Json.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("duration").getString("text");
 
-                JSONObject duree_voiture_Json = new JSONObject(JsonDureeVoiture);
-                String dureeTrajetVoiture = duree_voiture_Json.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("duration").getString("text");
-
                 //-----------------------------------------
-                resultStrs[i] = nom + "\n" + address + "\n" + Double.toString(latres) + "\n" + Double.toString(lngres) + "\n" + dureeTrajet + "\n" + dureeTrajetVoiture;
+                resultStrs[i] = nom + "\n" + address + "\n" + Double.toString(latres) + "\n" + Double.toString(lngres) + "\n" + dureeTrajet;
             }
 
             return resultStrs;

@@ -20,7 +20,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -44,6 +43,7 @@ public class SettingsActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_trnspt_key)));
     }
 
     /**

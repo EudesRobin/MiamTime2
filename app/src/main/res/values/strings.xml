@@ -31,6 +31,20 @@
     <!-- Default range location preference [CHAR LIMIT=NONE] -->
     <string name="pref_range_default" translatable="false">250</string>
 
+    <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
+    <string name="pref_trnspt_label">Moyen de transport</string>
+    <!-- Label for metric option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_trnspt_label_pied">A pied</string>
+    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_trnspt_label_voiture">En voiture</string>
+
+    <!-- Key name for temperature unit preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_trnspt_key" translatable="false">trnspt</string>
+    <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_trnspt_pied" translatable="false">walking</string>
+    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_trnspt_voiture" translatable="false">driving</string>
+
     <!-- Label for the range preference [CHAR LIMIT=30] -->
     <string name="pref_lat_label">Latitude</string>
 

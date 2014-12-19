@@ -10,5 +10,12 @@
         android:inputType="number"
         android:singleLine="true" />
 
+    <ListPreference
+        android:title="@string/pref_trnspt_label"
+        android:key="@string/pref_trnspt_key"
+        android:defaultValue="@string/pref_trnspt_pied"
+        android:entryValues="@array/pref_trnspt_values"
+        android:entries="@array/pref_trnspt_options" />
+
 
 </PreferenceScreen>
