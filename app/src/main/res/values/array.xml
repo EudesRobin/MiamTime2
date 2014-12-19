@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_trnspt_options">
+        <item>@string/pref_trnspt_label_pied</item>
+        <item>@string/pref_trnspt_label_voiture</item>
+    </string-array>
+    <string-array name="pref_trnspt_values">
+        <item>@string/pref_trnspt_pied</item>
+        <item>@string/pref_trnspt_voiture</item>
+    </string-array>
+</resources>
