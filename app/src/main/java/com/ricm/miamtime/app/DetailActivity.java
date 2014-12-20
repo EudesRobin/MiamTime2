@@ -122,7 +122,7 @@ public class DetailActivity extends ActionBarActivity {
 
         private String buildGoogleMapURL() {
 
-            String[] mForecastSplit = new String[4];
+            String[] mForecastSplit = new String[5];
 
             int i=0;
             for(String retval: mForecastStr.split("\n")){

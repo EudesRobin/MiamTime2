@@ -54,6 +54,7 @@ public class ForecastFragment extends Fragment {
     private final String LOG_TAG = ForecastFragment.class.getSimpleName();
 
     private ArrayAdapter<String> mForecastAdapter;
+    private ArrayAdapter<String> mForecastAdapterDetails;
 
     public ForecastFragment() {
     }
@@ -102,6 +103,12 @@ public class ForecastFragment extends Fragment {
                         R.layout.list_item_forecast, // The name of the layout ID.
                         R.id.list_item_forecast_textview, // The ID of the textview to populate.
                         new ArrayList<String>());
+        mForecastAdapterDetails =
+                new ArrayAdapter<String>(
+                        getActivity(), // The current context (this activity)
+                        R.layout.list_item_forecast, // The name of the layout ID.
+                        R.id.list_item_forecast_textview, // The ID of the textview to populate.
+                        new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -112,7 +119,7 @@ public class ForecastFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mForecastAdapter.getItem(position);
+                String forecast = mForecastAdapterDetails.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         .putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(intent);
@@ -391,10 +398,19 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] result) {
+            int i;
             if (result != null) {
                 mForecastAdapter.clear();
+                mForecastAdapterDetails.clear();
+                String[] mForecastSplit = new String[5];
                 for(String dayForecastStr : result) {
-                    mForecastAdapter.add(dayForecastStr);
+                    i=0;
+                    for(String retval: dayForecastStr.split("\n")){
+                        mForecastSplit[i]=retval;
+                        i++;
+                    }
+                    mForecastAdapter.add(mForecastSplit[0] + " - " + mForecastSplit[4]);
+                    mForecastAdapterDetails.add(dayForecastStr);
                 }
                 // New data is back from the server.  Hooray!
             }
