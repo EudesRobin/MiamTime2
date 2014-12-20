@@ -71,6 +71,7 @@ public class DetailActivity extends ActionBarActivity {
 
         private static final String FORECAST_SHARE_HASHTAG = " #MiamTimeApp";
         private String mForecastStr;
+        private String mForecastDet;
 
         public DetailFragment() {
             setHasOptionsMenu(true);
@@ -85,8 +86,16 @@ public class DetailActivity extends ActionBarActivity {
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 mForecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+                mForecastDet=null;
+                int i = 0;
+                String[] mForecastSplit = new String[5];
+                    for(String retval: mForecastStr.split("\n")){
+                        mForecastSplit[i]=retval;
+                        i++;
+                    }
+                    mForecastDet = mForecastSplit[0] + "\n" + mForecastSplit[1] + "\n" + mForecastSplit[4];
                 ((TextView) rootView.findViewById(R.id.detail_text))
-                        .setText(mForecastStr);
+                        .setText(mForecastDet);
             }
             return rootView;
         }

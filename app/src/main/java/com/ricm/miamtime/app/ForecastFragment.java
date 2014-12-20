@@ -427,7 +427,7 @@ public class ForecastFragment extends Fragment {
                         i++;
                     }
                     mForecastAdapter.add(mForecastSplit[0] + " - " + mForecastSplit[4]);
-                    mForecastAdapterDetails.add(mForecastSplit[0] + "\n" + mForecastSplit[1] + "\n" + mForecastSplit[4]);
+                    mForecastAdapterDetails.add(dayForecastStr);
                 }
                 // New data is back from the server.  Hooray!
             }
