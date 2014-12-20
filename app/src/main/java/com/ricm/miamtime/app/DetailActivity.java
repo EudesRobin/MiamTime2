@@ -36,6 +36,7 @@ public class DetailActivity extends ActionBarActivity {
 
     DetailFragment detailFragment = new DetailFragment();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

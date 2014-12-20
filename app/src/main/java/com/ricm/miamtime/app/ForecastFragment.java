@@ -15,6 +15,7 @@
  */
 package com.ricm.miamtime.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -56,14 +57,16 @@ public class ForecastFragment extends Fragment {
     private ArrayAdapter<String> mForecastAdapter;
     private ArrayAdapter<String> mForecastAdapterDetails;
 
+    //Roue de chargement
+    protected ProgressDialog myProgressDialog;
+
     public ForecastFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Add this line in order for this fragment to handle menu events.
-        setHasOptionsMenu(true);
+        // Add this line in order for this
     }
 
     @Override
@@ -77,17 +80,7 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_retourPremPage) {
-            Utility.nextPageToken=null;
-            updateWeather();
-            return true;
-        }
-        if (id == R.id.more_res) {
-            if(Utility.nextPageToken != null){
-                updateWeather();
-                return true;
-            }
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -129,13 +122,38 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    public void moreResults() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        myProgressDialog = ProgressDialog.show(getActivity(),
+                "", "Chargement", true);
+        weatherTask.execute(Utility.actualRange);
+    }
+
     public void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String range = prefs.getString(getString(R.string.pref_range_key),
                 getString(R.string.pref_range_default));
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String tspType = sharedPrefs.getString(
+                getString(R.string.pref_trnspt_key),
+                getString(R.string.pref_trnspt_pied));
+        String modeTsp;
+        if (tspType.equals(getString(R.string.pref_trnspt_voiture))) {
+            modeTsp = "driving";
+        } else  {
+            modeTsp = "walking";
+        }
         //Utility.nextPageToken=null;
-        weatherTask.execute(range);
+        if(range!=Utility.actualRange || modeTsp != Utility.actualTrspt){
+           myProgressDialog = ProgressDialog.show(getActivity(),
+                  "", "Chargement", true);
+            Utility.actualRange = range;
+            Utility.actualTrspt = modeTsp;
+            weatherTask.execute(range);
+        }
+
     }
 
     @Override
@@ -234,9 +252,6 @@ public class ForecastFragment extends Fragment {
                     Uri builtUri = Uri.parse(uriduree).buildUpon().build();
 
                     URL url = new URL(builtUri.toString());
-
-                    Log.d(LOG_TAG, "check URL" + builtUri.toString());
-
                     // Create the request to OpenWeatherMap, and open the connection
                     urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("GET");
@@ -286,7 +301,7 @@ public class ForecastFragment extends Fragment {
                 //-----------------------------------------
                 resultStrs[i] = nom + "\n" + address + "\n" + Double.toString(latres) + "\n" + Double.toString(lngres) + "\n" + dureeTrajet;
             }
-
+            myProgressDialog.dismiss();
             return resultStrs;
 
         }

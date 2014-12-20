@@ -9,4 +9,7 @@
     <item android:id="@+id/more_res"
         android:title="@string/action_moreres"
         app:showAsAction="never" />
+    <item android:id="@+id/action_retourPremPage"
+        android:title="@string/action_retourPremPage"
+        app:showAsAction="never" />
 </menu>

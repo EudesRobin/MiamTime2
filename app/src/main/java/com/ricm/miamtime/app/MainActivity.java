@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import java.util.List;
 
 
@@ -33,14 +34,14 @@ public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     LocationManager mLocationManager;
-
+    ForecastFragment forecastFragment = new ForecastFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, forecastFragment)
                     .commit();
         }
 
@@ -100,6 +101,11 @@ public class MainActivity extends ActionBarActivity {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
+        if (id == R.id.action_retourPremPage) {
+            Utility.nextPageToken=null;
+            forecastFragment.moreResults();
+            return true;
+        }
         if (id == R.id.more_res) {
             if (Utility.nextPageToken == null) {
                 AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
@@ -114,6 +120,8 @@ public class MainActivity extends ActionBarActivity {
                 dlgAlert.setCancelable(true);
                 dlgAlert.create().show();
                 return true;
+            }else{
+                forecastFragment.moreResults();
             }
         }
         return super.onOptionsItemSelected(item);
