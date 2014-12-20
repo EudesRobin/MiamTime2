@@ -107,6 +107,7 @@ public class ForecastFragment extends Fragment {
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -145,10 +146,11 @@ public class ForecastFragment extends Fragment {
         } else  {
             modeTsp = "walking";
         }
-        //Utility.nextPageToken=null;
+
         if(range!=Utility.actualRange || modeTsp != Utility.actualTrspt){
            myProgressDialog = ProgressDialog.show(getActivity(),
                   "", "Chargement", true);
+            Utility.nextPageToken=null;
             Utility.actualRange = range;
             Utility.actualTrspt = modeTsp;
             weatherTask.execute(range);
@@ -413,8 +415,8 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] result) {
-            int i;
             if (result != null) {
+                int i;
                 mForecastAdapter.clear();
                 mForecastAdapterDetails.clear();
                 String[] mForecastSplit = new String[5];
@@ -425,7 +427,7 @@ public class ForecastFragment extends Fragment {
                         i++;
                     }
                     mForecastAdapter.add(mForecastSplit[0] + " - " + mForecastSplit[4]);
-                    mForecastAdapterDetails.add(dayForecastStr);
+                    mForecastAdapterDetails.add(mForecastSplit[0] + "\n" + mForecastSplit[1] + "\n" + mForecastSplit[4]);
                 }
                 // New data is back from the server.  Hooray!
             }
