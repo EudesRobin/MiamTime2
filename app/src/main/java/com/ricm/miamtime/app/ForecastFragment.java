@@ -16,7 +16,6 @@
 package com.ricm.miamtime.app;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,7 +24,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -310,7 +307,7 @@ public class ForecastFragment extends Fragment {
 
             if(PlacesArray.length()==0){
                 resultStrs = new String[1];
-                resultStrs[0]="AUCUN RESULTAT :(";
+                resultStrs[0]= Utility.noResult;
             }
             return resultStrs;
 
@@ -434,7 +431,12 @@ public class ForecastFragment extends Fragment {
                         mForecastSplit[i]=retval;
                         i++;
                     }
-                    mForecastAdapter.add(mForecastSplit[0] + " - " + mForecastSplit[4]);
+                    if(mForecastSplit[0] != Utility.noResult || mForecastSplit[4]!= null){
+                        mForecastAdapter.add(mForecastSplit[0] + " - " + mForecastSplit[4]);
+                    }else{
+                        mForecastAdapter.add(mForecastSplit[0]);
+                    }
+
                     mForecastAdapterDetails.add(dayForecastStr);
                 }
                 // New data is back from the server.  Hooray!

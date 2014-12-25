@@ -14,6 +14,7 @@ public class Utility {
     public static String nextPageToken = null;
     public static String actualRange;
     public static String actualTrspt;
+    public static final String noResult = "Aucun résultat";
 
     public static String getPreferredRange(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
