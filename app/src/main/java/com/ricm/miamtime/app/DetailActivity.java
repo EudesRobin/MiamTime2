@@ -58,7 +58,9 @@ public class DetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        detailFragment.itineraire();
+        if (item.getItemId() == R.id.action_itineraire){
+            detailFragment.itineraire();
+        }
         return super.onOptionsItemSelected(item);
     }
 
